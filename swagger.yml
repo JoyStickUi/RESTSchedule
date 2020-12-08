@@ -1,0 +1,234 @@
+swagger: "2.0"
+info:
+  description: I didn't steal this code. You have my word.                  x
+  version: "1.0.0"
+  title: BlaBla title
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /v1
+
+# Paths supported by the server application
+paths:
+  /users:
+    get:
+      operationId: user.read_all
+      tags:
+        - User
+      summary: Read one user
+      description: Read one user
+      parameters:
+        - name: token
+          in: query
+          description: token of the user to get
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successfully read user from user data operation
+          schema:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                  description: Id of the user in the database
+                login:
+                  type: string
+                  description: login
+                name:
+                  type: string
+                  description: name of user
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
+
+  /token/{user_id}:
+    get:
+      operationId: user.token
+      tags:
+        - User
+      parameters:
+        - name: user_id
+          in: path
+          description: user id
+          type: integer
+          required: true
+        - name: password
+          in: query
+          description: user password
+          type: string
+          required: true
+      responses:
+        200:
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              login:
+                type: string
+              token:
+                type: string
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        404:
+          description: Item Not Found
+        500:
+          description: Internal Server Error
+
+  /user:
+    post:
+      operationId: user.create
+      tags:
+        - User
+      consumes:
+        - application/json
+      parameters:
+        - name: user
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              login:
+                type: string
+              name:
+                type: string
+              token:
+                type: string
+      responses:
+        201:
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              login:
+                type: string
+              name:
+                type: string
+              token:
+                type: string
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        404:
+          description: Item Not Found
+        500:   
+          description: Internal Server Error
+
+  /user/{user_id}:
+    get:
+      operationId: user.read_one
+      tags:
+        - User
+      parameters:
+        - name: user_id
+          in: path
+          type: integer
+          required: true
+        - name: token
+          in: query
+          type: string
+          required: true
+      responses:
+        200:
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              login:
+                type: string
+              name:
+                type: string
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        404:
+          description: Item Not Found
+        500:
+          description: Internal Server Error
+
+    put:
+      operationId: user.update
+      tags:
+        - User
+      parameters:
+        - name: user_id
+          in: path
+          type: integer
+          required: true
+        - name: token
+          in: query
+          type: string
+          required: string
+        - name: user
+          in: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              login:
+                type: string
+              name:
+                type: string
+      responses:
+        200:
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              login:
+                type: string
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Item Not Found
+        500:
+          description: Internal Server Error
+
+    delete:
+      operationId: user.delete
+      tags:
+        - User
+      parameters:
+        - name: user_id
+          in: path
+          type: integer
+          required: true
+        - name: token
+          in: query
+          type: string
+          required: true
+      responses:
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Item Not found
+        500:
+          description: Internal Server Error
+
+
