@@ -66,17 +66,22 @@ paths:
           required: true
       responses:
         200:
+          description: A User object
           schema:
             type: object
             properties:
               id:
                 type: integer
+                description: The user ID
               name:
                 type: string
+                description: The user name
               login:
                 type: string
+                description: The user login
               token:
                 type: string
+                description: The user authorization token
         400:
           description: Bad Request
         401:
@@ -110,17 +115,22 @@ paths:
                 type: string
       responses:
         201:
+          description: f
           schema:
             type: object
             properties:
               id:
                 type: integer
+                description: g
               login:
                 type: string
+                description: f
               name:
                 type: string
+                description: f
               token:
                 type: string
+                description: f
         400:
           description: Bad Request
         401:
@@ -146,15 +156,19 @@ paths:
           required: true
       responses:
         200:
+          description: f
           schema:
             type: object
             properties:
               id:
                 type: integer
+                description: f
               login:
                 type: string
+                description: f
               name:
                 type: string
+                description: f
         400:
           description: Bad Request
         401:
@@ -176,29 +190,37 @@ paths:
         - name: token
           in: query
           type: string
-          required: string
+          required: true
         - name: user
           in: body
+          required: true
           schema:
             type: object
             properties:
               id:
                 type: integer
+                description: f
               login:
                 type: string
+                description: f
               name:
                 type: string
+                description: f
       responses:
         200:
+          description: f
           schema:
             type: object
             properties:
               id:
                 type: integer
+                description: f
               name:
                 type: string
+                description: f
               login:
                 type: string
+                description: f
         401:
           description: Unauthorized
         403:

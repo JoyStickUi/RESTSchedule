@@ -1,24 +1,25 @@
-from flask import make_response.abort
+from flask import make_response, abort
 from config import db
-from models import User, UserSchema
+from models import User, UserSchema, TokenSchema
 import hashlib
 import random
+from datetime import datetime
 
 
 def read_all(token):
     user = User.query.filter(User.token == token).one_or_none()
 
-    if user not None:
-        users = User.query.all()
+    if user is not None:
+        users = User.query.order_by(User.id).all()
         user_schema = UserSchema(many=True)
-        data = user_schema.dump(user).data
+        data = user_schema.dump(users).data
         return data
     else:
         abort(403, f"Not allowed")
 
-def read_one(id):
+def read_one(user_id):
     user = (
-        User.query.filter(Person.id == id)
+        User.query.filter(User.id == user_id)
         .one_or_none()
     )
 
@@ -27,20 +28,22 @@ def read_one(id):
         data = user_schema.dump(user).data
         return data
     else:
-        abort(404, f"User not found for Id: {id}")
+        abort(404, f"User not found for Id: {user_id}")
+
+def create_token():
+    return hashlib.md5(bin(random.randint(1, 10000)).encode()).hexdigest()
 
 def token(user_id, password):
     user = User.query.filter(User.id == user_id).filter(User.password == password).one_or_none()
 
     if user is not None:
-        user.token = hashlib.md5(bin(random.randint(1, 10000))).hexdigets()
+        user.token = create_token()
 
-	db.session.add(user)
-	db.session.commit()
+        db.session.add(user)
+        db.session.commit()
 
-	user_schema = UserSchema()
+        user_schema = TokenSchema()
         data = user_schema.dump(user).data
-        data.token = user.token
         return data
     else:
         abort(403, f"Not allowed")
@@ -52,27 +55,27 @@ def create(user):
 
     existing_user = (
         User.query.filter(User.login == login)
-        .filter(user.name == name)
+        .filter(User.name == name)
         .one_or_none()
     )
 
     if existing_user is None:
         schema = UserSchema()
-        new_user = User(name=name, login=login, password=password)
+        new_user = User(id=(int(User.query.all()[-1].id) + 1), name=name, login=login, password=password, token=create_token(), expiration=datetime.now())
 
-        db.session.add(user)
+        db.session.add(new_user)
         db.session.commit()
 
         data = schema.dump(new_user).data
 
         return data, 201
-     else:
+    else:
          abort(409, f"User already exist")
 
 def update(user_id, token, user):
     update_user = User.query.filter(
-        User.id == id
-    ).filter(User.token == token).one_or_none
+        User.id == user_id
+    ).filter(User.token == token).one_or_none()
 
     name = user.get("name")
     login = user.get("login")
@@ -90,15 +93,15 @@ def update(user_id, token, user):
 
         return data, 200
     else:
-        abort(404, f"User not found for Id: {id}")
+        abort(404, f"User not found for Id: {user_id}")
 
 def delete(user_id, token):
-    user = User.query.filter(User.id == id).filter(User.token == token).one_or_none()
+    user = User.query.filter(User.id == user_id).filter(User.token == token).one_or_none()
 
     if user is not None:
         db.session.delete(user)
         db.session.commit()
-        return make_response(f"User {id} deleted", 200)
+        return make_response(f"User {user_id} deleted", 200)
     else:
-        abort(404, f"User not found for Id: {id}")
+        abort(404, f"User not found for Id: {user_id}")
 
