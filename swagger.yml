@@ -253,4 +253,167 @@ paths:
         500:
           description: Internal Server Error
 
+  /faculty:
+    get:
+      operationId: group.read_all_fac
+      tags:
+        - Group
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: f
+          schema:
+            type: array
+            items:
+              properties:
+                id:
+                  description: f
+                  type: integer
+                login:
+                  type: string
+                  description: f
+                name:
+                  type: string
+                  description: f
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
 
+  /faculty/{faculty_id}:
+    get:
+      operationId: group.read_one_fac
+      tags:
+        - Group
+      parameters:
+        - name: faculty_id
+          in: path
+          required: true
+          type: integer
+        - name: token
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: f
+          schema:
+            type: object
+            description: f
+            properties:
+              id:
+                type: integer
+                description: f
+              name:
+                type: string
+                description: f
+              structures:
+                type: array
+                description: f
+                items:
+                  properties:
+                    id:
+                      description: f
+                      type: integer
+                    name:
+                      type: string
+                      description: f
+                    levels:
+                      description: f
+                      type: array
+                      items:
+                        properties:
+                          id:
+                            description: f
+                            type: integer
+                          name:
+                            description: f
+                            type: string
+                          groups:
+                            description: f
+                            type: array
+                            items:
+                              properties:
+                                id:
+                                  description: f
+                                  type: integer
+                                name:
+                                  description: f
+                                  type: string
+                                course:
+                                  description: f
+                                  type: integer
+                                url:
+                                  type: string
+                                  description: f
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
+
+
+  /teacher:
+    get:
+      operationId: group.teachers
+      tags:
+        - Group
+      parameters:
+        - name: token
+          in: query
+          type: string
+          required: true
+      responses:
+        200:
+          description: f
+          schema:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
+
+  /auditory:
+    get:
+      operationId: group.auditory
+      tags:
+        - Group
+      parameters:
+        - name: token
+          in: query
+          required: true
+          type: string
+      responses:
+        200:
+          description: f
+          schema:
+            type: array
+            items:
+              properties: 
+                id:
+                  description: f
+                  type: integer
+                name:
+                  type: string
+                  description: f
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
